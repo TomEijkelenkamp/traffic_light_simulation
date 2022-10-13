@@ -1,5 +1,6 @@
 import pygame
 from pygame import gfxdraw
+import bin.classes.turbo
 
 class Window:
 
@@ -23,8 +24,8 @@ class Window:
 
     def draw_car(self, car):
         position = car.get_current_position_2d()
-        pygame.gfxdraw.filled_circle(self.screen, int(position.x), int(position.y), car._length, (0,0,255))
-        pygame.gfxdraw.aacircle(self.screen, int(position.x), int(position.y), car._length, (240,248,255))
+        pygame.gfxdraw.filled_circle(self.screen, int(position.x), int(position.y), car._length, car.get_color())
+        pygame.gfxdraw.aacircle(self.screen, int(position.x), int(position.y), car._length, car.get_color())
 
     def draw_road(self, road):
         pygame.draw.line(self.screen, (220,220,220), road._crossing_a.get_position(), road._crossing_b.get_position(), 10)

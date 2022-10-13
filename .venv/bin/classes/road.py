@@ -18,11 +18,11 @@ class Road:
     # Add a random car to the road in a random direction
     def add_random_car(self):
         if random.choice([True, False]):
-            car = Car(self, 'a', len(self._cars_a) )
+            car = Car(self, 'a')
             self._cars_a.append( car )
             return car
         else:
-            car = Car(self, 'b', len(self._cars_b) )
+            car = Car(self, 'b')
             self._cars_b.append( car )
             return car
 

@@ -1,6 +1,7 @@
 
 import math
 import random
+from bin.classes.turbo import Turbo
 
 class Car:
 
@@ -10,17 +11,16 @@ class Car:
     # @param acceleration: The acceleration of the car
     # @param deceleration: The deceleration of the car
     # @param length: The length of the car
-    def __init__(self, road, direction, number_in_queue):
+    def __init__(self, road, direction):
         self._road = road
         self._direction = direction
-        self._number_in_queue = number_in_queue
 
         self._mass = random.randint(1000, 2000)
-        self._friction = random.randint(100, 200)
+        self._friction = random.randint(30, 60)
         self._sensitify = 1 / (self._mass / self._friction) 
         self._force = 0
 
-        self._safety_distance = 5
+        self._safety_distance = 20
         self._max_speed = 10
         self._length = 10
         
@@ -45,7 +45,6 @@ class Car:
             self._road = self._choice
             self._road.add_car(self)
             self._choice = self.choice()
-            self._number_in_queue = self._road._cars_a.index(self) if self._direction == 'a' else self._road._cars_b.index(self)
 
         self._current_position = self._next_position
         self._current_speed = self._next_speed
@@ -94,12 +93,12 @@ class Car:
         return self.leading_vehicle().get_current_position_1d() - self._current_position + self._length
 
     def leading_vehicle(self):
-        if self._number_in_queue == 0:
+        if self.get_number_in_queue() == 0:
             return self
         if self._direction == "a":
-            return self._road.get_car_a(self._number_in_queue - 2)
+            return self._road.get_car_a(self.get_number_in_queue() - 2)
         else:
-            return self._road.get_car_b(self._number_in_queue - 2)
+            return self._road.get_car_b(self.get_number_in_queue() - 2)
 
     def choice(self):
         if ( self._direction == "a" ):
@@ -132,6 +131,8 @@ class Car:
     def get_length(self):
         return self._length
 
+    def get_number_in_queue(self):
+        return self._road._cars_a.index(self) if self._direction == 'a' else self._road._cars_b.index(self)
 
-    
-
+    def get_color(self):
+        return Turbo.interpolate_or_clip(self.headway() / 300.0)
