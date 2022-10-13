@@ -16,12 +16,12 @@ class Car:
         self._direction = direction
 
         self._mass = random.randint(1000, 2000)
-        self._friction = random.randint(30, 60)
-        self._sensitify = 1 / (self._mass / self._friction) 
+        self._friction = random.randint(100, 200)
+        self._sensitify = 1 / random.randint(40, 80)
         self._force = 0
 
-        self._safety_distance = 20
-        self._max_speed = 10
+        self._safety_distance = 50
+        self._max_speed = 50
         self._length = 10
         
         self._current_speed = 0
@@ -96,9 +96,9 @@ class Car:
         if self.get_number_in_queue() == 0:
             return self
         if self._direction == "a":
-            return self._road.get_car_a(self.get_number_in_queue() - 2)
+            return self._road.get_car_a(self.get_number_in_queue() - 1)
         else:
-            return self._road.get_car_b(self.get_number_in_queue() - 2)
+            return self._road.get_car_b(self.get_number_in_queue() - 1)
 
     def choice(self):
         if ( self._direction == "a" ):
@@ -122,10 +122,14 @@ class Car:
         else:
             return b + (a-b) / self._road._length * self._current_position
 
-        # self._current_position / self._road.length()
-        # return (a[0] + (b[0] - a[0]) * self._current_position / self._road.length(), a[1] + (b[1] - a[1]) * self._current_position / self._road.length())
+    def get_current_position_2d_front(self):
+        a = self._road._crossing_a._position
+        b = self._road._crossing_b._position
 
-        # return (a[0] + (b[0] - a[0]) * self._current_position / self._road.get_length(), a[1] + (b[1] - a[1]) * self._current_position / self._road.get_length())
+        if self._direction == "b":
+            return a + (b-a) / self._road._length * (self._current_position + self._length)
+        else:
+            return b + (a-b) / self._road._length * (self._current_position + self._length)
 
 
     def get_length(self):
@@ -135,4 +139,5 @@ class Car:
         return self._road._cars_a.index(self) if self._direction == 'a' else self._road._cars_b.index(self)
 
     def get_color(self):
-        return Turbo.interpolate_or_clip(self.headway() / 300.0)
+        color = Turbo.interpolate_or_clip_grey(self.headway() / (10.0*self._length))
+        return color

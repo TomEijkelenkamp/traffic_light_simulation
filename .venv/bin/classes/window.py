@@ -1,5 +1,6 @@
 import pygame
 from pygame import gfxdraw
+from pygame import font
 import bin.classes.turbo
 
 class Window:
@@ -8,6 +9,7 @@ class Window:
         self.width = width
         self.height = height
         self.scale = scale
+        pygame.init()
         self.screen = pygame.display.set_mode((width, height))
         self.screen.fill((100, 100, 100))
         pygame.display.set_caption('Traffic Simulation')
@@ -25,10 +27,19 @@ class Window:
     def draw_car(self, car):
         position = car.get_current_position_2d()
         pygame.gfxdraw.filled_circle(self.screen, int(position.x), int(position.y), car._length, car.get_color())
-        pygame.gfxdraw.aacircle(self.screen, int(position.x), int(position.y), car._length, car.get_color())
+
+        front = car.get_current_position_2d_front()
+        pygame.gfxdraw.filled_circle(self.screen, int(front.x), int(front.y), int(car._length / 3), (0,0,0))
+
+        # draw the current_position_in_queue as text
+        font = pygame.font.SysFont('Arial', 20, (0, 0, 0), (0, 0, 0))
+        text = font.render(str(car.get_number_in_queue()), True, (0, 0, 0))
+        self.screen.blit(text, (position.x, position.y))
+
+        
 
     def draw_road(self, road):
-        pygame.draw.line(self.screen, (220,220,220), road._crossing_a.get_position(), road._crossing_b.get_position(), 10)
+        pygame.draw.line(self.screen, (220,220,220), road._crossing_a.get_position(), road._crossing_b.get_position(), 20)
 
     def update(self):
         pygame.display.update()

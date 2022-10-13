@@ -3,12 +3,12 @@ from bin.classes.road_network import RoadNetwork
 import pygame
 
 def main():
-    road_network = RoadNetwork(800, 800, 5, 50, 50)
+    road_network = RoadNetwork(950, 950, 3, 50, 50)
 
-    for i in range(50):
+    for i in range(30):
         road_network.add_random_car()
 
-    window = Window(850, 850, 1)
+    window = Window(1000, 1000, 1)
 
     done = False
     clock = pygame.time.Clock()

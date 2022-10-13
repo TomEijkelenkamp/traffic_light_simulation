@@ -48,3 +48,6 @@ class RoadNetwork:
             
         for car in self._cars:
             car.tick()
+
+        for road in self._roads:
+            road.next()

@@ -43,6 +43,11 @@ class Road:
         b = self._crossing_b.get_position()
         return math.sqrt( (a[0] - b[0])**2 + (a[1] - b[1])**2 )
 
+    # Sort the queue of cars in the road
+    def next(self):
+        self._cars_a.sort(key=lambda car: car._current_position, reverse=True)
+        self._cars_b.sort(key=lambda car: car._current_position, reverse=True)
+
     def get_car_a(self, i):
         return self._cars_a[i]
 

@@ -30,3 +30,9 @@ class Turbo:
         if   x < 0.0: return [0.0, 0.0, 0.0]
         elif x > 1.0: return [1.0, 1.0, 1.0]
         else: return Turbo.interpolate(x)
+
+    @staticmethod
+    def interpolate_or_clip_grey(x):
+        if   x < 0.0: return (0.0, 0.0, 0.0)
+        elif x > 1.0: return (255, 255, 255)
+        else: return (x*255, x*255, x*255) 
