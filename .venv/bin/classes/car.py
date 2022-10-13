@@ -38,14 +38,14 @@ class Car:
             self._road.remove_car(self)
             
             if self._direction == 'a':
-                self._direction = 'a' if self._road._crossing_a == self._choice._crossing_a else 'b'
+                self._direction = 'b' if self._road._crossing_a == self._choice._crossing_a else 'a'
             else:
-                self._direction = 'a' if self._road._crossing_b == self._choice._crossing_a else 'b'
+                self._direction = 'b' if self._road._crossing_b == self._choice._crossing_a else 'a'
 
             self._road = self._choice
             self._road.add_car(self)
             self._choice = self.choice()
-            self._number_in_queue = self._road.get_cars_a().index(self) if self._direction == 'a' else self._road.get_cars_b().index(self)
+            self._number_in_queue = self._road._cars_a.index(self) if self._direction == 'a' else self._road._cars_b.index(self)
 
         self._current_position = self._next_position
         self._current_speed = self._next_speed
@@ -62,21 +62,44 @@ class Car:
         if self.leading_vehicle() == self:
             a = self.get_current_position_2d()
             b = self._road._crossing_a._position if self._direction == 'a' else self._road._crossing_b._position
-            headway_to_crossing = math.sqrt( (a.x - b.x)**2 + (a.y - b.y)**2 )
+            headway = math.sqrt( (a.x - b.x)**2 + (a.y - b.y)**2 )
 
-            # self._choice.get_ca
-
-            return headway_to_crossing
-
+            if self._direction == 'a':
+                if self._road._crossing_a == self._choice._crossing_a:
+                    if len(self._choice._cars_b) > 0:
+                        c = self._choice._cars_b[-1].get_current_position_2d()
+                        headway += math.sqrt( (c.x - b.x)**2 + (c.y - b.y)**2 )
+                    else:
+                        headway += self._choice._length
+                else:
+                    if len(self._choice._cars_a) > 0:
+                        c = self._choice._cars_a[-1].get_current_position_2d()
+                        headway += math.sqrt( (c.x - b.x)**2 + (c.y - b.y)**2 )
+                    else:
+                        headway += self._choice._length
+            else:
+                if self._road._crossing_b == self._choice._crossing_a:
+                    if len(self._choice._cars_b) > 0:
+                        c = self._choice._cars_b[-1].get_current_position_2d()
+                        headway += math.sqrt( (c.x - b.x)**2 + (c.y - b.y)**2 )
+                    else:
+                        headway += self._choice._length
+                else:
+                    if len(self._choice._cars_a) > 0:
+                        c = self._choice._cars_a[-1].get_current_position_2d()
+                        headway += math.sqrt( (c.x - b.x)**2 + (c.y - b.y)**2 )
+                    else:
+                        headway += self._choice._length
+            return headway
         return self.leading_vehicle().get_current_position_1d() - self._current_position + self._length
 
     def leading_vehicle(self):
         if self._number_in_queue == 0:
             return self
         if self._direction == "a":
-            return self._road.get_car_a(self._number_in_queue - 1)
+            return self._road.get_car_a(self._number_in_queue - 2)
         else:
-            return self._road.get_car_b(self._number_in_queue - 1)
+            return self._road.get_car_b(self._number_in_queue - 2)
 
     def choice(self):
         if ( self._direction == "a" ):
