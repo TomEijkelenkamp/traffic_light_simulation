@@ -24,6 +24,9 @@ class Window:
             for car in road._cars_b:
                 self.draw_car(car)
 
+        for crossing in road_network.get_crossings():
+            self.draw_crossing(crossing)
+
     def draw_car(self, car):
         position = car.get_current_position_2d()
         pygame.gfxdraw.filled_circle(self.screen, int(position.x), int(position.y), car._length, car.get_color())
@@ -40,6 +43,16 @@ class Window:
 
     def draw_road(self, road):
         pygame.draw.line(self.screen, (220,220,220), road._crossing_a.get_position(), road._crossing_b.get_position(), 20)
+
+    def draw_crossing(self, crossing):
+        for light in crossing.get_lights():
+            self.draw_light(light)
+        # font = pygame.font.SysFont('Arial', 20, (0, 0, 0), (0, 0, 0))
+        # text = font.render(str(crossing._time), True, (0, 0, 0))
+        # self.screen.blit(text, (crossing.get_position()[0], crossing.get_position()[1]))
+
+    def draw_light(self, light):
+        pygame.gfxdraw.filled_circle(self.screen, int(light.get_position()[0]), int(light.get_position()[1]), 10, light.get_color())
 
     def update(self):
         pygame.display.update()

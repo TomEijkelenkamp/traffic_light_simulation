@@ -51,3 +51,13 @@ class RoadNetwork:
 
         for road in self._roads:
             road.next()
+
+        for crossing in self.get_crossings():
+            crossing.next()
+
+    def get_crossings(self):
+        crossings = []
+        for row in self._crossings:
+            for crossing in row:
+                crossings.append(crossing)
+        return crossings

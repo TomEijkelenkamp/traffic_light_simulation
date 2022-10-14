@@ -1,6 +1,7 @@
 import random
 from bin.classes.car import Car
 import math
+from bin.classes.orientation import Orientation
 
 class Road:
 
@@ -9,8 +10,21 @@ class Road:
         self._crossing_b = crossing_b
         self._length = self.length()
 
-        crossing_a.add_road(self)
-        crossing_b.add_road(self)
+        if crossing_a._position.y > crossing_b._position.y: 
+            orientation_a = Orientation.N 
+            orientation_b = Orientation.S
+        elif crossing_a._position.y < crossing_b._position.y: 
+            orientation_a = Orientation.S 
+            orientation_b = Orientation.N
+        elif crossing_a._position.x > crossing_b._position.x: 
+            orientation_a = Orientation.W 
+            orientation_b = Orientation.E
+        elif crossing_a._position.x < crossing_b._position.x: 
+            orientation_a = Orientation.E 
+            orientation_b = Orientation.W
+
+        crossing_a.add_road(self, orientation_a)
+        crossing_b.add_road(self, orientation_b)
 
         self._cars_a = []
         self._cars_b = []

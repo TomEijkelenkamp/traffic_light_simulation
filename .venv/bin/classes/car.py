@@ -64,6 +64,13 @@ class Car:
             headway = math.sqrt( (a.x - b.x)**2 + (a.y - b.y)**2 )
 
             if self._direction == 'a':
+                if headway > 30 and self._road._crossing_a.get_light_status(self._road) == 'R':
+                    return headway
+            else:
+                if headway > 30 and self._road._crossing_b.get_light_status(self._road) == 'R':
+                    return headway
+
+            if self._direction == 'a':
                 if self._road._crossing_a == self._choice._crossing_a:
                     if len(self._choice._cars_b) > 0:
                         c = self._choice._cars_b[-1].get_current_position_2d()
@@ -107,7 +114,7 @@ class Car:
             choices = self._road._crossing_b._roads
 
         # Weight probabilities, backwards road are less likely  
-        return random.choices(list(choices), weights=[1 if road == self._road else 5 for road in choices], k=1)[0]
+        return random.choices(list(choices), weights=[0 if road == self._road else 5 for road in choices], k=1)[0]
 
     # Getters
     def get_current_position_1d(self):
