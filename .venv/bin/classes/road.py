@@ -1,7 +1,9 @@
 import random
 from bin.classes.car import Car
+from bin.classes.car_idm import IDMCar
 import math
 from bin.classes.orientation import Orientation
+
 
 class Road:
 
@@ -30,13 +32,19 @@ class Road:
         self._cars_b = []
 
     # Add a random car to the road in a random direction
-    def add_random_car(self):
+    def add_random_car(self, model):
         if random.choice([True, False]):
-            car = Car(self, 'a')
+            if model == 1:
+                car = Car(self, 'a')
+            else:
+                car = IDMCar(self, 'a')
             self._cars_a.append( car )
             return car
         else:
-            car = Car(self, 'b')
+            if model == 1:
+                car = Car(self, 'b')
+            else:
+                car = IDMCar(self, 'b')
             self._cars_b.append( car )
             return car
 
@@ -63,10 +71,17 @@ class Road:
         self._cars_b.sort(key=lambda car: car._current_position, reverse=True)
 
     def get_car_a(self, i):
-        return self._cars_a[i]
+        if len(self._cars_a) > (i+1):
+            return self._cars_a[i]
+        else:
+            return None
 
     def get_car_b(self, i):
-        return self._cars_b[i]
+        if len(self._cars_b) > (i+1):
+            return self._cars_b[i]
+        else:
+            return None
+
 
     def __eq__(self, __o: object) -> bool:
         return self._crossing_a == __o._crossing_a and self._crossing_b == __o._crossing_b

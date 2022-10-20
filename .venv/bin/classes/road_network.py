@@ -2,6 +2,11 @@ import random
 from bin.classes.road import Road
 from bin.classes.crossing import Crossing
 from bin.classes.point import Point
+from enum import Enum
+
+class Model(Enum):
+    OVM = 1
+    IDM = 2
 
 class RoadNetwork:
 
@@ -17,6 +22,7 @@ class RoadNetwork:
         self._crossings = [[Crossing( Point(x_positions[x], y_positions[y]) ) for y in range(n)] for x in range(n)]
         self._roads = set()
         self._cars = set()
+        self._model = 2
 
         for x in range(n-1):
             for y in range(n-1):
@@ -37,7 +43,7 @@ class RoadNetwork:
     # Add a car to a random road in the network
     def add_random_car(self):
         road = random.sample(self._roads, 1)[0]
-        self._cars.add( road.add_random_car() )
+        self._cars.add( road.add_random_car(self._model) )
 
     def get_roads(self):
         return self._roads
