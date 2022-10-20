@@ -1,5 +1,6 @@
 import random
 from bin.classes.car import Car
+from bin.classes.car_idm import IDMCar
 import math
 
 class Road:
@@ -18,11 +19,11 @@ class Road:
     # Add a random car to the road in a random direction
     def add_random_car(self):
         if random.choice([True, False]):
-            car = Car(self, 'a')
+            car = IDMCar(self, 'a')
             self._cars_a.append( car )
             return car
         else:
-            car = Car(self, 'b')
+            car = IDMCar(self, 'b')
             self._cars_b.append( car )
             return car
 

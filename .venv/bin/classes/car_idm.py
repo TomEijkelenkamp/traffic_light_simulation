@@ -21,8 +21,8 @@ class IDMCar(Car):
         self._sensitify = 1 / random.randint(40, 80)
         self._force = 0
 
-        self._safety_distance = 50
-        self._max_speed = 50
+        self._safety_distance = 5
+        self._max_speed = 5
         self._length = 10
         
         self._current_speed = 0
@@ -33,10 +33,11 @@ class IDMCar(Car):
 
         self._choice = self.choice()
 
-        self._desired_velocity = 50
-        self._desired_time_headway = 1
-        self._maximum_acceleration = 0.8
-        self._comfortable_deceleration = 2.0
+        self._desired_velocity = 5
+        self._desired_time_headway = random.uniform(0.8,2)
+        self._maximum_acceleration = random.uniform(0.8,2)
+        self._comfortable_deceleration = random.uniform(0.8,2)
+        self._acceleretaion_exponent = 4
 
     def tick(self):
         if (self._next_position > self._road._length):
@@ -56,8 +57,10 @@ class IDMCar(Car):
         self._current_speed = self._next_speed
 
     def next(self):
-        self._force = self._sensitify * self.optimal_velocity() - self._current_speed
-        self._next_speed = self._current_speed + self._force
+        lead = self.leading_vehicle()
+        #self._force = self._sensitify * self.optimal_velocity() - self._current_speed
+        self.desired_gap = self._safety_distance + self._desired_time_headway*self._current_speed + (self._current_speed * (lead._current_speed - self._current_speed))/ (2*math.sqrt(self._maximum_acceleration*self._comfortable_deceleration))
+        self._next_speed = self._maximum_acceleration * (1 - ((self._current_speed/self._desired_velocity))**self._acceleretaion_exponent - ((self.desired_gap/self.headway()))**2 )
         self._next_position = self._current_position + self._current_speed
 
     def optimal_velocity(self):
