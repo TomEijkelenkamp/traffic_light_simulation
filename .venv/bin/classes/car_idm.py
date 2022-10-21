@@ -20,7 +20,7 @@ class IDMCar(Car):
         self._sensitify = 1 / random.randint(40, 80)
         self._force = 0
 
-        self._safety_distance = 20
+        self._safety_distance = 30
         #self._max_speed = 50
         self._length = 10
         
@@ -37,6 +37,14 @@ class IDMCar(Car):
         self._maximum_acceleration = random.uniform(0.8,2)
         self._comfortable_deceleration = random.uniform(0.8,2.5)
         self._acceleretaion_exponent = 4
+
+        #stopping parameters
+        self._distance_stop_location = 50
+        self._distance_stop_location_stopped = 50
+        self._time_stop_factor = 1
+        self._unforced_braking_parameter = 2
+        self.stop_at_signal = 0
+
 
     def tick(self):
         if (self._next_position > self._road._length):
@@ -58,30 +66,30 @@ class IDMCar(Car):
 
     def next(self):
         lead = self.leading_vehicle()
-        #if lead is not None:
-        #self._force = self._sensitify * self.optimal_velocity() - self._current_speed
+
+        if(lead == self):
+            self.stop_signal = self._distance_stop_location_stopped + self._time_stop_factor*self._current_speed + (self._current_speed **2)/ (2*math.sqrt(self._maximum_acceleration*self._comfortable_deceleration))
+            self.stop_at_signal = (self.stop_signal/self.headway())**self._unforced_braking_parameter
+        
         self.desired_gap = self._safety_distance + self._desired_time_headway*self._current_speed + (self._current_speed * (lead._current_speed - self._current_speed))/ (2*math.sqrt(self._maximum_acceleration*self._comfortable_deceleration))
-        self._next_speed = self._maximum_acceleration  * (1 - ((self._current_speed/self._desired_velocity)**self._acceleretaion_exponent - (self.desired_gap/self.headway()))**2 )
+        self._next_speed = self._maximum_acceleration  * (1 - ((self._current_speed/self._desired_velocity)**self._acceleretaion_exponent - (self.desired_gap/self.headway()))**2 - self.stop_at_signal)  
         self._next_position = self._current_position + self._current_speed
 
         if self._current_speed < 0 and (self.headway() < self._safety_distance):
             self._next_speed = 0
-        #else:
-            #self._next_speed = self._maximum_acceleration  * (1 - (self._current_speed/self._desired_velocity)**self._acceleretaion_exponent )
-            #self._next_position = self._current_position + self._next_speed
-            #print(self._next_speed)
-
         
-        
-
-    #def optimal_velocity(self):
-        #return self._max_speed / 2 * ( math.tanh( self.headway() - self._safety_distance ) + math.tanh( self._safety_distance ) )
-
     def headway(self):
         if self.leading_vehicle() == self:
             a = self.get_current_position_2d()
             b = self._road._crossing_a._position if self._direction == 'a' else self._road._crossing_b._position
             headway = math.sqrt( (a.x - b.x)**2 + (a.y - b.y)**2 )
+
+            if self._direction == 'a':
+                if headway > 30 and self._road._crossing_a.get_light_status(self._road) == 'R':
+                    return headway
+            else:
+                if headway > 30 and self._road._crossing_b.get_light_status(self._road) == 'R':
+                    return headway
 
             if self._direction == 'a':
                 if self._road._crossing_a == self._choice._crossing_a:

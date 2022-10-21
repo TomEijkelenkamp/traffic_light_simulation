@@ -1,3 +1,4 @@
+from numpy import  int64, short
 import pygame
 from pygame import gfxdraw
 from pygame import font
