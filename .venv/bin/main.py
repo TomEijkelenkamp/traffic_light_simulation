@@ -1,5 +1,6 @@
 from bin.classes.window import Window
 from bin.classes.road_network import RoadNetwork
+from bin.classes.fuzzylogic_signals_control import fuzzylogicsignals
 import pygame
 
 def main():
@@ -9,6 +10,10 @@ def main():
         road_network.add_random_car()
 
     window = Window(1000, 1000, 1)
+
+    # testing fuzzy logic
+    fz = fuzzylogicsignals()
+    fz.fuzzytime(7,3) # input to the function count and change in count
 
     done = False
     clock = pygame.time.Clock()
