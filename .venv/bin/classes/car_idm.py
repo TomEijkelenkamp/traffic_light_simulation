@@ -20,8 +20,8 @@ class IDMCar(Car):
         self._sensitify = 1 / random.randint(40, 80)
         self._force = 0
 
-        self._safety_distance = 30
-        #self._max_speed = 50
+        self._safety_distance = 50
+        #self._max_speed = 120
         self._length = 10
         
         self._current_speed = 0
@@ -32,15 +32,15 @@ class IDMCar(Car):
 
         self._choice = self.choice()
 
-        self._desired_velocity = 50
-        self._desired_time_headway = random.uniform(0.8,2)
-        self._maximum_acceleration = random.uniform(0.8,2)
-        self._comfortable_deceleration = random.uniform(0.8,2.5)
+        self._desired_velocity = 5
+        self._desired_time_headway = 2.5#random.uniform(0.8,2)
+        self._maximum_acceleration = 2.5#random.uniform(0.8,2)
+        self._comfortable_deceleration = 2.5#random.uniform(0.8,2.5)
         self._acceleretaion_exponent = 4
 
         #stopping parameters
-        self._distance_stop_location = 50
-        self._distance_stop_location_stopped = 50
+        self._distance_stop_location1 = 50
+        self._distance_stop_location_stopped = 30
         self._time_stop_factor = 1
         self._unforced_braking_parameter = 2
         self.stop_at_signal = 0
@@ -72,10 +72,12 @@ class IDMCar(Car):
             self.stop_at_signal = (self.stop_signal/self.headway())**self._unforced_braking_parameter
         
         self.desired_gap = self._safety_distance + self._desired_time_headway*self._current_speed + (self._current_speed * (lead._current_speed - self._current_speed))/ (2*math.sqrt(self._maximum_acceleration*self._comfortable_deceleration))
-        self._next_speed = self._maximum_acceleration  * (1 - ((self._current_speed/self._desired_velocity)**self._acceleretaion_exponent - (self.desired_gap/self.headway()))**2 - self.stop_at_signal)  
+        self._force = self._maximum_acceleration  * (1 - ((self._current_speed/self._desired_velocity)**self._acceleretaion_exponent - (self.desired_gap/self.headway()))**2 - self.stop_at_signal)  
+        
+        self._next_speed = self._current_speed + self._force
         self._next_position = self._current_position + self._current_speed
-
-        if self._current_speed < 0 and (self.headway() < self._safety_distance):
+        
+        if self._next_speed < 0: #and (self.headway() < self._safety_distance):
             self._next_speed = 0
         
     def headway(self):
