@@ -132,12 +132,10 @@ class IDMCar(Car):
 
     def choice(self):
         if ( self._direction == "a" ):
-            choices = self._road._crossing_a._roads
+            choices = self._road._crossing_a.get_choices(self._road)
         else:
-            choices = self._road._crossing_b._roads
-
-        # Weight probabilities, backwards road are less likely  
-        return random.choices(list(choices), weights=[1 if road == self._road else 5 for road in choices], k=1)[0]
+            choices = self._road._crossing_b.get_choices(self._road)
+        return random.choices(choices, k=1)[0]
 
     # Getters
     def get_current_position_1d(self):
