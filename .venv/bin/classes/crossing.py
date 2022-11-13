@@ -1,6 +1,6 @@
-from bin.classes.light import Light
-from bin.classes.orientation import Orientation
-from bin.classes.fuzzylogic_signals_control import fuzzylogicsignals
+from classes.light import Light
+from classes.orientation import Orientation
+from classes.fuzzylogic_signals_control import fuzzylogicsignals
 
 class Crossing:
 
@@ -8,9 +8,10 @@ class Crossing:
         self._position = point
         self._roads = [None, None, None, None]
         self._lights = set()
-        self._green_time = 200
+        self._green_time = 0
         self._green = Orientation.N
-        self._sensor_position = 50
+        self._sensor_position = 250
+        self._recalculate_green_time = 50
         self._cars_sensored_last_iteration = 0
         self._cars_sensored_current_iteration = 0
         self._fuzz = fuzzylogicsignals()
@@ -31,17 +32,18 @@ class Crossing:
                 return light.get_state()
 
     def next(self):
-        if self._green_time == 0:
+        if self._green_time <= 0:
             self.rotate_to_next_green_light()
             self.set_green_time()
         else:
             self._green_time -= 1
-        if self._green_time % 10 == 0:
+        if self._green_time > 0 and self._green_time % self._recalculate_green_time == 0:
             self.set_green_time()
             
     def rotate_to_next_green_light(self):
         self._green = Orientation.next(self._green)
         while not self._roads[self._green.value]:
+            print(str(hash(self)) + ": " + str(self._green.value))
             self._green = Orientation.next(self._green)
         for light in self._lights:
             light.set_state('G') if light._orientation == self._green else light.set_state('R')
@@ -52,7 +54,7 @@ class Crossing:
         self._cars_sensored_last_iteration = self._cars_sensored_current_iteration
 
     def get_green_road(self):
-        return self._roads[self._green]
+        return self._roads[self._green.value]
 
     def get_cars_green_road(self):
         green_road = self.get_green_road()

@@ -76,6 +76,6 @@ class fuzzylogicsignals:
         sim.input['count change'] = change_count
         sim.compute()
         out = sim.output['time']
-        print(np.round(out,2))
+        #print(str(count) + " / " + str(change_count) + " = " + str(np.round(out,2) ))
         return np.round(out,2)
 

@@ -1,4 +1,4 @@
-from bin.classes.orientation import Orientation
+from classes.orientation import Orientation
 
 class Light:
 

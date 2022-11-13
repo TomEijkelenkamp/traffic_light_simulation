@@ -1,8 +1,8 @@
 import random
-from bin.classes.car import Car
-from bin.classes.car_idm import IDMCar
+from classes.car import Car
+from classes.car_idm import IDMCar
 import math
-from bin.classes.orientation import Orientation
+from classes.orientation import Orientation
 
 
 class Road:
@@ -88,4 +88,7 @@ class Road:
 
     def __hash__(self) -> int:
         return hash((self._crossing_a, self._crossing_b))
+
+    def __lt__(self, other):
+        return hash(self) < hash(other)
 

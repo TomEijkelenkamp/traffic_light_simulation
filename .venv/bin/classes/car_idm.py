@@ -1,7 +1,7 @@
 import math
 import random
-from bin.classes.turbo import Turbo
-from bin.classes.car import Car
+from classes.turbo import Turbo
+from classes.car import Car
 
 class IDMCar(Car):
 

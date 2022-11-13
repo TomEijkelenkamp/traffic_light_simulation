@@ -1,6 +1,6 @@
-from bin.classes.window import Window
-from bin.classes.road_network import RoadNetwork
-from bin.classes.fuzzylogic_signals_control import fuzzylogicsignals
+from classes.window import Window
+from classes.road_network import RoadNetwork
+from classes.fuzzylogic_signals_control import fuzzylogicsignals
 import pygame
 
 def main():

@@ -1,7 +1,7 @@
 import random
-from bin.classes.road import Road
-from bin.classes.crossing import Crossing
-from bin.classes.point import Point
+from classes.road import Road
+from classes.crossing import Crossing
+from classes.point import Point
 from enum import Enum
 
 class Model(Enum):
@@ -34,6 +34,8 @@ class RoadNetwork:
 
         for x in range(n-1):
             self.add_road( Road( self._crossings[x][n-1], self._crossings[x+1][n-1] ) )
+
+        self._roads = sorted(self._roads)
 
     # Add a road to the network
     # @param road: The road to add
