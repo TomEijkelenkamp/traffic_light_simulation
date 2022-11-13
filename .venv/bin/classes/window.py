@@ -36,9 +36,9 @@ class Window:
         pygame.gfxdraw.filled_circle(self.screen, int(front.x), int(front.y), int(car._length / 3), (0,0,0))
 
         # draw the current_position_in_queue as text
-        font = pygame.font.SysFont('Arial', 20, (0, 0, 0), (0, 0, 0))
-        text = font.render(str(car.get_number_in_queue()), True, (0, 0, 0))
-        self.screen.blit(text, (position.x, position.y))
+        # font = pygame.font.SysFont('Arial', 20, (0, 0, 0), (0, 0, 0))
+        # text = font.render(str(car.get_number_in_queue()), True, (0, 0, 0))
+        # self.screen.blit(text, (position.x, position.y))
 
     def draw_road(self, road):
         pygame.draw.line(self.screen, (220,220,220), road._crossing_a.get_position(), road._crossing_b.get_position(), 20)

@@ -10,7 +10,7 @@ class Crossing:
         self._lights = set()
         self._green_time = 0
         self._green = Orientation.N
-        self._sensor_position = 250
+        self._sensor_position = 750
         self._recalculate_green_time = 50
         self._cars_sensored_last_iteration = 0
         self._cars_sensored_current_iteration = 0
@@ -39,11 +39,15 @@ class Crossing:
             self._green_time -= 1
         if self._green_time > 0 and self._green_time % self._recalculate_green_time == 0:
             self.set_green_time()
+
+    def set_current_green_to_red(self):
+        for light in self._lights:
+            if light._orientation == self._green:
+                light.set_state('R') 
             
     def rotate_to_next_green_light(self):
         self._green = Orientation.next(self._green)
         while not self._roads[self._green.value]:
-            print(str(hash(self)) + ": " + str(self._green.value))
             self._green = Orientation.next(self._green)
         for light in self._lights:
             light.set_state('G') if light._orientation == self._green else light.set_state('R')

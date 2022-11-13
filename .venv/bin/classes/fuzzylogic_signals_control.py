@@ -8,34 +8,28 @@ import matplotlib.pyplot as plt
 #   * Tip has a range of [0, 25] in units of percentage points
 class fuzzylogicsignals:
     def __init__(self):
-        count = ctrl.Antecedent(np.arange(0, 11, 1), 'count')
-        count_change = ctrl.Antecedent(np.arange(-10, 11, 1), 'count change')
-        time = ctrl.Consequent(np.arange(0, 31, 1), 'time', defuzzify_method='centroid')
+        count = ctrl.Antecedent(np.arange(0, 8, 1), 'count')
+        count_change = ctrl.Antecedent(np.arange(-7, 7, 1), 'count change')
+        time = ctrl.Consequent(np.arange(0, 301, 1), 'time', defuzzify_method='centroid')
 
         # Generate fuzzy membership functions
-        least = count['least'] = fuzz.trapmf(count.universe, [0,0, 1, 3])
-        less = count['less'] = fuzz.trimf(count.universe, [1, 3, 5])
-        normal = count['normal'] = fuzz.trimf(count.universe, [3, 5, 7])
-        many = count['many'] = fuzz.trimf(count.universe, [5, 7, 9])
-        very_much = count['very_much'] = fuzz.trapmf(count.universe, [7, 9,10, 10])
+        least = count['least'] = fuzz.trapmf(count.universe, [0, 0, 2, 3])
+        less = count['less'] = fuzz.trimf(count.universe, [2, 3, 4])
+        normal = count['normal'] = fuzz.trimf(count.universe, [3, 4, 5])
+        many = count['many'] = fuzz.trimf(count.universe, [4, 5, 6])
+        very_much = count['very_much'] = fuzz.trapmf(count.universe, [5, 6, 7, 7])
 
-        # count_change['greatly_decreased'] = fuzz.trapmf(count_change.universe,[-10, -10, -7,-3])
-        # count_change['decreased'] = fuzz.trimf(count_change.universe,[-6, -3, 0])
-        # count_change['constant'] = fuzz.trimf(count_change.universe, [3, 3, 3])
-        # count_change['increased'] = fuzz.trimf(count_change.universe, [0, 3, 6])
-        # count_change['greatly_increased'] = fuzz.trapmf(count_change.universe, [3, 7, 10, 10])
+        count_change['greatly_decreased'] = fuzz.trapmf(count_change.universe, [-6, -6, -4, -2])
+        count_change['decreased'] = fuzz.trimf(count_change.universe, [-4, -2, 0])
+        count_change['constant'] = fuzz.trimf(count_change.universe, [-2, 0, 2])
+        count_change['increased'] = fuzz.trimf(count_change.universe,  [0, 2, 4])
+        count_change['greatly_increased'] = fuzz.trapmf(count_change.universe, [2, 4, 6, 6])
 
-        count_change['greatly_decreased'] = fuzz.trapmf(count_change.universe, [-10,-10, -3, -1])
-        count_change['decreased'] = fuzz.trimf(count_change.universe, [-6, -3, 0])
-        count_change['constant'] = fuzz.trimf(count_change.universe, [-3, 0, 3])
-        count_change['increased'] = fuzz.trimf(count_change.universe,  [0, 3, 6])
-        count_change['greatly_increased'] = fuzz.trapmf(count_change.universe, [3, 7, 10, 10])
-
-        time['very_briefly'] = fuzz.trapmf(time.universe, [0,5,7, 12])
-        time['briefly'] = fuzz.trimf(time.universe, [7, 12,17])
-        time['medium'] = fuzz.trimf(time.universe,  [12, 17, 22])
-        time['long'] = fuzz.trimf(time.universe,  [17, 22, 27])
-        time['very_long'] = fuzz.trapmf(time.universe, [22, 26, 30, 30])
+        time['very_briefly'] = fuzz.trapmf(time.universe, [0, 10, 50, 100])
+        time['briefly'] = fuzz.trimf(time.universe, [50, 100, 150])
+        time['medium'] = fuzz.trimf(time.universe,  [100, 150, 200])
+        time['long'] = fuzz.trimf(time.universe,  [150, 200, 250])
+        time['very_long'] = fuzz.trapmf(time.universe, [200, 250, 300, 300])
 
         rule1 = ctrl.Rule(count['least'] & count_change['greatly_decreased'] , time['very_briefly'])
         rule2 = ctrl.Rule(count['least'] & count_change['decreased'] , time['very_briefly'])
@@ -77,5 +71,5 @@ class fuzzylogicsignals:
         sim.compute()
         out = sim.output['time']
         #print(str(count) + " / " + str(change_count) + " = " + str(np.round(out,2) ))
-        return np.round(out,2)
+        return np.round(out,2) 
 

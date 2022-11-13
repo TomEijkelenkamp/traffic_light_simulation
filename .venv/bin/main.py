@@ -4,7 +4,7 @@ from classes.fuzzylogic_signals_control import fuzzylogicsignals
 import pygame
 
 def main():
-    road_network = RoadNetwork(950, 950, 3, 50, 50)
+    road_network = RoadNetwork(1300, 1300, 3, 0, 50)
 
     for i in range(30):
         road_network.add_random_car()
